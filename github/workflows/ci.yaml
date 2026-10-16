@@ -65,7 +65,7 @@ jobs:
 
       - name: run maven test
         env:
-          DATASOURCE_URL: jdbc:postgresql://postgres:5432/gestion_user_profil
+          DATASOURCE_URL: jdbc:postgresql://localhost:5432/gestion_user_profil
           DATASOURCE_USERNAME: gestion_user
           DATASOURCE_PASSWORD: gestion_user
         run: mvn test
