@@ -1,0 +1,71 @@
+name: user and profil CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  quality:
+    name: Lint code
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: checkstyle
+        run: mvn checkstyle:check
+
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    needs: quality
+
+    services:
+      postgres-database:
+        image: postgres:16
+        env:
+          POSTGRES_DB: gestion_user_profil
+          POSTGRES_USER: gestion_user
+          POSTGRES_PASSWORD: gestion_user
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gestion_user"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 3
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: waiting for postgres to be ready
+        run: |
+          echo "waiting for postgres..."
+          until pg_isready -h localhost -p 5432 -U gestion_user; do sleep 5; done
+
+      - name: run maven test
+        env:
+          DATASOURCE_URL: jdbc:postgresql://postgres:5432/gestion_user_profil
+          DATASOURCE_USERNAME: gestion_user
+          DATASOURCE_PASSWORD: gestion_user
+        run: mvn test

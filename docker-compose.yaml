@@ -26,9 +26,9 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATASOURCE_URL: ${DATASOURCE_URL}
-      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
-      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/gestion_user_profil
+      DATASOURCE_USERNAME: gestion_user
+      DATASOURCE_PASSWORD: gestion_user
     ports:
       - "8080:8080"
 volumes:

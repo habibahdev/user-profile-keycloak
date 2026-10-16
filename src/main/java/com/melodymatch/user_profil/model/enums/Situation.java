@@ -1,5 +1,23 @@
 package com.melodymatch.user_profil.model.enums;
 
 public enum Situation {
-    IN_A_RELATIONSHIP, SINGLE, DIVORCED, MARRIED
+    /**
+     * in a relationship situation.
+     */
+    IN_A_RELATIONSHIP,
+
+    /**
+     * single situation.
+     */
+    SINGLE,
+
+    /**
+     * divorced situation.
+     */
+    DIVORCED,
+
+    /**
+     * married situation.
+     */
+    MARRIED
 }
